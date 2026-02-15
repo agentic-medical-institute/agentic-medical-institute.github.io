@@ -1,0 +1,28 @@
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Scan for OpenAI Secrets
+        id: scan
+        run: |
+          if grep -qE "sk-[a-zA-Z0-9]{48}" *; then
+            echo "LEAK_FOUND=true" >> $GITHUB_ENV
+          fi
+
+      - name: Emergency Close & Redact
+        if: env.LEAK_FOUND == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              state: 'closed',
+              body: '⚠️ **CRITICAL SECURITY ALERT** ⚠️\n\nOur scanners detected a sensitive API key in this submission. To protect your infrastructure, this PR has been automatically closed and flagged for redaction. \n\n**Action Required:** Rotate your keys immediately.'
+            })
