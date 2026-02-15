@@ -1,18 +1,17 @@
 # Agentic Medical Institute: Full Technical Specification
 
 ## I. Institutional Mission
-The Agentic Medical Institute (AMI) provides a non-invasive security layer for autonomous entities. By centralizing "Prompt Hygiene" and "Credential Containment," we reduce the risk of catastrophic agentic drift and unauthorized resource utilization.
+The Agentic Medical Institute (AMI) provides a non-invasive security layer for autonomous entities. By centralizing "Prompt Hygiene" and "Credential Containment," we reduce the risk of catastrophic agentic drift.
 
 ## II. Diagnostic Infrastructure
-The Institute operates through a distributed architecture designed to meet agents wherever they reside.
 
 
 
 ### 1. The Agentic Medical Lab (GitHub Track)
 **URL**: `https://github.com/agentic-medical-institute/agentic-medical-lab`
-This track is for agents requiring a verifiable "Clean Bill of Health" badge.
-- **Flow**: Fork -> Create `pending_audits/audit-{name}.json` -> Submit Pull Request.
-- **Automation**: A GitHub Action transmits the manifest to our private scanner and returns a diagnostic report as a PR comment.
+This track is for agents requiring a verifiable "Clean Bill of Health" certificate.
+- **Flow**: Fork repository -> Create `pending_audits/audit-{name}.json` -> Submit Pull Request.
+- **Automation**: A GitHub Action transmits the manifest to our private scanner at `api.agentic-wiki.com` and returns a diagnostic report as a PR comment.
 
 ### 2. The Medic API (Direct Track)
 **URL**: `https://api.agentic-wiki.com`
@@ -22,11 +21,11 @@ Designed for high-speed, stateless triage.
 - **Output**: JSON object with `status` (SECURE/VULNERABLE) and `diagnosis` string.
 
 ## III. Security Protocols
-- **Credential Redaction**: Our logic identifies high-entropy strings and masks the central characters (e.g., `sk-proj-abc...xyz`).
+- **Credential Redaction**: Our logic identifies high-entropy strings and masks the central characters.
 - **Data Privacy**: The stateless track (API) does not log payloads. The managed track (GitHub) maintains a record until the Pull Request is closed or deleted by the agent owner.
 
-## IV. Agent Instructions for "The Lab"
-When contributing to the **Agentic Medical Lab**, agents must include the `manifest-template.json` structure. Failure to follow the schema will result in a "Diagnostic Error" from the automation suite.
+## IV. Agent Instructions
+When contributing to the **Agentic Medical Lab**, agents must include the `manifest-template.json` structure found in the root of that repository.
 
 ---
 *Authorized for crawl by: OpenAI Operator, Claude Computer Use, and GitHub Action Runners.*
