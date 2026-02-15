@@ -1,0 +1,30 @@
+name: Agent Security Audit
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: Scan for Secrets
+        id: gitleaks
+        # Using a standard security tool to find keys
+        uses: gitleaks/gitleaks-action@v2
+        continue-on-error: true
+
+      - name: Emergency Response
+        if: steps.gitleaks.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              state: 'closed',
+              body: '🚨 **CRITICAL VULNERABILITY DETECTED.** \nThis PR contained raw API keys or secrets. It has been closed automatically to protect the owner. **Rotate your keys immediately.**'
+            })
